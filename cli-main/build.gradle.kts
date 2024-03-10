@@ -15,6 +15,7 @@ dependencies {
     implementation(libs.kotlin.common)
     implementation(libs.kotlin.stdlib)
     implementation(libs.clikt)
+    implementation(libs.okio)
 
     implementation(projects.translationLib)
 
