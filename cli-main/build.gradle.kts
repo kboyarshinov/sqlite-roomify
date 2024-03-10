@@ -18,7 +18,10 @@ dependencies {
 
     implementation(projects.translationLib)
 
-    testImplementation(platform(libs.testing.junit))
+    testImplementation(platform(libs.testing.junit.bom))
+    testImplementation(libs.testing.junit.jupiter)
+    testRuntimeOnly(libs.testing.junit.launcher)
+
     testImplementation(libs.testing.kotlin.test.common)
     testImplementation(libs.testing.kotlin.test.junit)
 }

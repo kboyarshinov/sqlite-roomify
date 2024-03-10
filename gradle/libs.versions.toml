@@ -6,6 +6,7 @@ kotlin = "1.9.23"
 kotlinpoet = "1.16.0"
 jsqlparser = "4.9"
 clikt = "4.2.2"
+okio = "3.8.0"
 junit = "5.10.2"
 
 [libraries]
@@ -13,13 +14,16 @@ junit = "5.10.2"
 kotlinpoet = { module = "com.squareup:kotlinpoet", version.ref = "kotlinpoet" }
 jsqlparser = { module = "com.github.jsqlparser:jsqlparser", version.ref = "jsqlparser" }
 clikt = { module = "com.github.ajalt.clikt:clikt", version.ref = "clikt" }
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 # kotlin
 kotlin-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 
 # testing
-testing-junit = { module = "org.junit:junit-bom", version.ref = "junit" }
+testing-junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+testing-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit" }
+testing-junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
 testing-kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
 testing-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 
