@@ -1,5 +1,6 @@
 CREATE TABLE t1(
-    t       TEXT,
+    id      INT NOT NULL PRIMARY KEY,
+    t       TEXT NOT NULL,
     nu      NUMERIC,
     i       INTEGER,
     i1      INT,
@@ -15,7 +16,7 @@ CREATE TABLE t1(
 );
 
 CREATE TABLE t2(
-    t       TEXT,
+    t       TEXT NOT NULL,
     nu      NUMERIC,
     i       INTEGER,
     i1      INT,

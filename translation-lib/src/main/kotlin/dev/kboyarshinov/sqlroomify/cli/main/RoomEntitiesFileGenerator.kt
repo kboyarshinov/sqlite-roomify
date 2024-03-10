@@ -5,11 +5,15 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
+import com.squareup.kotlinpoet.asTypeName
 import net.sf.jsqlparser.statement.Statement
 import net.sf.jsqlparser.statement.create.table.ColDataType
+import net.sf.jsqlparser.statement.create.table.ColumnDefinition
 import net.sf.jsqlparser.statement.create.table.CreateTable
 import okio.Path
 
@@ -24,20 +28,39 @@ internal class RoomEntitiesFileGenerator(
         val tables = statements
             .filterIsInstance<CreateTable>()
             .map { statement ->
-                val table = statement.table.name
+                val table = statement.table.name.replaceFirstChar { it.uppercase() }
                 val entity = TypeSpec.classBuilder(ClassName(outputPackage, table))
                     .addModifiers(KModifier.DATA)
                     .addAnnotation(
                         AnnotationSpec.builder(Room.entityAnnotation)
+                            .addMember("tableName = %S", statement.table.name)
                             .build()
                     )
 
                 val constructorBuilder = FunSpec.constructorBuilder()
                 statement.columnDefinitions.forEach {
+                    val columnName = it.columnName.lowercase()
                     try {
-                        constructorBuilder.addParameter(it.columnName, it.colDataType.asRoomType())
+                        val parameterBuilder = ParameterSpec.builder(columnName, it.asRoomType())
+                        if (it.primaryKey()) {
+                            parameterBuilder.addAnnotation(Room.primaryKeyAnnotation)
+                        }
+                        parameterBuilder.addAnnotation(
+                            AnnotationSpec.builder(Room.columnInfoAnnotation)
+                                .addMember("name = %S", it.columnName)
+                                .build()
+                        )
+                        constructorBuilder.addParameter(parameterBuilder.build())
+                        entity.addProperty(
+                            PropertySpec
+                                .builder(
+                                    columnName, it.asRoomType()
+                                )
+                                .initializer(columnName)
+                                .build()
+                        )
                     } catch (e: IllegalArgumentException) {
-                        ignoredColumns.add(it.columnName)
+                        ignoredColumns.add(columnName)
                     }
                 }
                 entity.primaryConstructor(constructorBuilder.build())
@@ -64,15 +87,25 @@ internal class RoomEntitiesFileGenerator(
 
 internal object Room {
     val entityAnnotation = ClassName("androidx.room", "Entity")
+    val primaryKeyAnnotation = ClassName("androidx.room", "PrimaryKey")
+    val columnInfoAnnotation = ClassName("androidx.room", "ColumnInfo")
 }
 
-internal fun ColDataType.asRoomType(): TypeName {
-    return when (dataType) {
-        "TEXT" -> String::class.asClassName()
+internal fun ColumnDefinition.primaryKey() = columnSpecs
+    ?.map { it.uppercase() }
+    ?.containsAll(listOf("PRIMARY", "KEY")) ?: false
+
+internal fun ColumnDefinition.notNull() = columnSpecs
+    ?.map { it.uppercase() }
+    ?.containsAll(listOf("NOT", "NULL")) ?: false
+
+internal fun ColumnDefinition.asRoomType(): TypeName {
+    return when (colDataType.dataType) {
+        "TEXT" -> String::class.asTypeName()
         "INT", "INTEGER" -> Int::class.asClassName()
         "REAL", "DOUBLE" -> Double::class.asClassName()
         "FLOAT" -> Float::class.asClassName()
         "BOOLEAN" -> Boolean::class.asClassName()
-        else -> throw IllegalArgumentException("Unsupported data type: $dataType")
-    }
+        else -> throw IllegalArgumentException("Unsupported data type: ${colDataType.dataType}")
+    }.copy(nullable = !notNull())
 }

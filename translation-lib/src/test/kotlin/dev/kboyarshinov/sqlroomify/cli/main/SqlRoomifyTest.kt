@@ -36,33 +36,52 @@ class SqlRoomifyTest {
             """
             package dev.test
             
+            import androidx.room.ColumnInfo
             import androidx.room.Entity
+            import androidx.room.PrimaryKey
             import kotlin.Boolean
             import kotlin.Double
             import kotlin.Float
             import kotlin.Int
             import kotlin.String
             
-            @Entity
-            public data class t1(
-              t: String,
-              i: Int,
-              i1: Int,
-              r: Double,
-              d: Double,
-              f: Float,
-              b: Boolean,
+            @Entity(tableName = "t1")
+            public data class T1(
+              @PrimaryKey
+              @ColumnInfo(name = "id")
+              public val id: Int,
+              @ColumnInfo(name = "t")
+              public val t: String,
+              @ColumnInfo(name = "i")
+              public val i: Int?,
+              @ColumnInfo(name = "i1")
+              public val i1: Int?,
+              @ColumnInfo(name = "r")
+              public val r: Double?,
+              @ColumnInfo(name = "d")
+              public val d: Double?,
+              @ColumnInfo(name = "f")
+              public val f: Float?,
+              @ColumnInfo(name = "b")
+              public val b: Boolean?,
             )
             
-            @Entity
-            public data class t2(
-              t: String,
-              i: Int,
-              i1: Int,
-              r: Double,
-              d: Double,
-              f: Float,
-              b: Boolean,
+            @Entity(tableName = "t2")
+            public data class T2(
+              @ColumnInfo(name = "t")
+              public val t: String,
+              @ColumnInfo(name = "i")
+              public val i: Int?,
+              @ColumnInfo(name = "i1")
+              public val i1: Int?,
+              @ColumnInfo(name = "r")
+              public val r: Double?,
+              @ColumnInfo(name = "d")
+              public val d: Double?,
+              @ColumnInfo(name = "f")
+              public val f: Float?,
+              @ColumnInfo(name = "b")
+              public val b: Boolean?,
             )
             
         """.trimIndent(), generatedFile.read()
