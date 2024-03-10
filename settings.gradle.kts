@@ -11,10 +11,7 @@ apply(file("gradle/plugin-repositories.gradle.kts"))
 // apply common repository configuration
 apply(file("gradle/repositories.gradle.kts"))
 
-rootProject.name = "gradle-kotlin-zero"
+rootProject.name = "sql-schema-to-room"
 
 // modules to include
-include(":kotlin-lib")
-include(":kotlin-multiplatform-lib")
-include(":kotlin-android-app")
-include(":kotlin-android-lib")
+include(":translation-lib")
