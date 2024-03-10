@@ -12,7 +12,6 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import net.sf.jsqlparser.statement.Statement
-import net.sf.jsqlparser.statement.create.table.ColDataType
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition
 import net.sf.jsqlparser.statement.create.table.CreateTable
 import okio.Path
@@ -28,7 +27,7 @@ internal class RoomEntitiesFileGenerator(
         val tables = statements
             .filterIsInstance<CreateTable>()
             .map { statement ->
-                val table = statement.table.name.replaceFirstChar { it.uppercase() }
+                val table = statement.table.name.lowercase().replaceFirstChar { it.uppercase() }
                 val entity = TypeSpec.classBuilder(ClassName(outputPackage, table))
                     .addModifiers(KModifier.DATA)
                     .addAnnotation(
