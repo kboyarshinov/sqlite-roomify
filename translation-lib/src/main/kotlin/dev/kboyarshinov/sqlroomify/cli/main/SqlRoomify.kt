@@ -17,10 +17,12 @@ public object SqlRoomify {
                 source.buffer().use { bufferedSource ->
                     val stream = bufferedSource.inputStream()
                     val parser = CCJSqlParserUtil.newParser(stream)
+                    val singleThreadExecutor = Executors.newSingleThreadExecutor()
                     val statements = CCJSqlParserUtil.parseStatements(
                         parser,
-                        Executors.newSingleThreadExecutor()
+                        singleThreadExecutor
                     )
+                    singleThreadExecutor.shutdownNow()
 
                     val generator = RoomEntitiesFileGenerator(outputDir, outputPackage)
 
