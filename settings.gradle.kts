@@ -14,4 +14,7 @@ apply(file("gradle/repositories.gradle.kts"))
 rootProject.name = "sql-schema-to-room"
 
 // modules to include
-include(":translation-lib")
+include(
+    ":translation-lib",
+    ":cli-main"
+)

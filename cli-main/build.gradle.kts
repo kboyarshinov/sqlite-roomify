@@ -1,17 +1,22 @@
 plugins {
     alias(libs.plugins.kotlin.jvm)
+    application
+}
+
+application {
+    mainClass = "dev.kboyarshinov.sqlroomify.cli.main.MainKt"
 }
 
 kotlin {
     jvmToolchain(19)
-    explicitApi()
 }
 
 dependencies {
     implementation(libs.kotlin.common)
     implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinpoet)
-    implementation(libs.jsqlparser)
+    implementation(libs.clikt)
+
+    implementation(projects.translationLib)
 
     testImplementation(platform(libs.testing.junit))
     testImplementation(libs.testing.kotlin.test.common)
