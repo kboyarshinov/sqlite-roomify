@@ -1,0 +1,32 @@
+[versions]
+# tools & plugins
+kotlin = "1.9.23"
+android-gradle = "8.3.0"
+
+# android's compileSdk, targetSdk, minSdk
+android-compile = "34"
+android-target = "34"
+android-min = "28"
+
+# libraries
+# add-your-library = "1.0.0"
+
+[libraries]
+# kotlin
+kotlin-common = { module = "org.jetbrains.kotlin:kotlin-stdlib-common", version.ref = "kotlin" }
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
+
+# testing
+testing-kotlin-test-common = { module = "org.jetbrains.kotlin:kotlin-test-common", version.ref = "kotlin" }
+testing-kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+
+[plugins]
+# kotlin
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt= { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+
+# android
+android-app = { id = "com.android.application", version.ref = "android-gradle" }
+android-lib = { id = "com.android.library", version.ref = "android-gradle" }
