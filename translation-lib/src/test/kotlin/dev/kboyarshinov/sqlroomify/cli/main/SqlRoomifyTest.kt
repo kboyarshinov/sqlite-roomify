@@ -48,9 +48,9 @@ class SqlRoomifyTest {
             
             @Entity(
               tableName = "t1",
-              indices = {
-              Index(name = "t1_t_index", value = "t", unique = false),
-              },
+              indices = [
+              Index(name = "t1_t_index", value = ["t"], unique = false)
+              ],
             )
             public data class T1(
               @PrimaryKey
@@ -74,9 +74,9 @@ class SqlRoomifyTest {
             
             @Entity(
               tableName = "t2",
-              indices = {
-              Index(name = "t2_t_index", value = "i1,date", unique = true),
-              },
+              indices = [
+              Index(name = "t2_t_index", value = ["i1","date"], unique = true)
+              ],
             )
             public data class T2(
               @ColumnInfo(name = "t")

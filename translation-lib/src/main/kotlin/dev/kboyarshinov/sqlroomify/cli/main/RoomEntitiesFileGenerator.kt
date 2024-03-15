@@ -2,6 +2,7 @@ package dev.kboyarshinov.sqlroomify.cli.main
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
@@ -50,7 +51,20 @@ internal class RoomEntitiesFileGenerator(
         val indicesAnnotations = tableIndices.map { createIndex ->
             AnnotationSpec.builder(Room.indexAnnotation)
                 .addMember("name = %S", createIndex.index.name)
-                .addMember("value = %S", createIndex.index.columns.joinToString(separator = ","))
+                .addMember(
+                    "value = %L",
+                    CodeBlock.builder().apply {
+                        add("[")
+                        createIndex.index.columns.forEachIndexed { index, columnParams ->
+                            if (index == createIndex.index.columns.size - 1) {
+                                add("%S", columnParams.columnName)
+                            } else {
+                                add("%S,", columnParams.columnName)
+                            }
+                        }
+                        add("]")
+                    }.build()
+                )
                 .addMember("unique = %L", createIndex.isUnique())
                 .build()
         }
@@ -60,8 +74,19 @@ internal class RoomEntitiesFileGenerator(
 
         if (indicesAnnotations.isNotEmpty()) {
             entityAnnotation.addMember(
-                "indices = {\n${"%L,\n".repeat(indicesAnnotations.count())}}",
-                *indicesAnnotations.toTypedArray()
+                "indices = %L", CodeBlock.builder()
+                    .apply {
+                        add("[\n")
+                        indicesAnnotations.forEachIndexed { index, spec ->
+                            if (index == indicesAnnotations.size - 1) {
+                                add("%L\n", spec)
+                            } else {
+                                add("%L,\n", spec)
+                            }
+                        }
+                        add("]")
+                    }
+                    .build()
             )
         }
         val entity = TypeSpec.classBuilder(ClassName(outputPackage, table))
