@@ -15,6 +15,8 @@ CREATE TABLE t1(
     dt      DATETIME
 );
 
+CREATE INDEX t1_t_index ON t1 (t);
+
 CREATE TABLE t2(
     t       TEXT NOT NULL,
     nu      NUMERIC,
@@ -30,3 +32,5 @@ CREATE TABLE t2(
     date    DATE,
     dt      DATETIME
 );
+
+CREATE UNIQUE INDEX t2_t_index ON t2 (i1, date);

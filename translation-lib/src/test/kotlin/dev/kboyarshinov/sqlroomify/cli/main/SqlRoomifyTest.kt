@@ -38,6 +38,7 @@ class SqlRoomifyTest {
             
             import androidx.room.ColumnInfo
             import androidx.room.Entity
+            import androidx.room.Index
             import androidx.room.PrimaryKey
             import kotlin.Boolean
             import kotlin.Double
@@ -45,7 +46,12 @@ class SqlRoomifyTest {
             import kotlin.Int
             import kotlin.String
             
-            @Entity(tableName = "t1")
+            @Entity(
+              tableName = "t1",
+              indices = {
+              Index(name = "t1_t_index", value = "t", unique = false),
+              },
+            )
             public data class T1(
               @PrimaryKey
               @ColumnInfo(name = "id")
@@ -66,7 +72,12 @@ class SqlRoomifyTest {
               public val b: Boolean?,
             )
             
-            @Entity(tableName = "t2")
+            @Entity(
+              tableName = "t2",
+              indices = {
+              Index(name = "t2_t_index", value = "i1,date", unique = true),
+              },
+            )
             public data class T2(
               @ColumnInfo(name = "t")
               public val t: String,
