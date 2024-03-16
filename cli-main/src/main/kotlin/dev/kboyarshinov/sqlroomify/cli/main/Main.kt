@@ -4,6 +4,7 @@ import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.path
+import dev.kboyarshinov.sqlroomify.lib.SqlRoomify
 import okio.Path.Companion.toOkioPath
 import java.io.File
 import java.nio.file.Path

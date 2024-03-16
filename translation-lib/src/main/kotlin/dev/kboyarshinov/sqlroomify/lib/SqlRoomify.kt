@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.cli.main
+package dev.kboyarshinov.sqlroomify.lib
 
 import net.sf.jsqlparser.JSQLParserException
 import net.sf.jsqlparser.parser.CCJSqlParserUtil

@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.cli.main
+package dev.kboyarshinov.sqlroomify.lib
 
 import okio.FileNotFoundException
 import okio.FileSystem
