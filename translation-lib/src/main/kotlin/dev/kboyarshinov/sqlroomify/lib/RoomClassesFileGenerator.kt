@@ -7,7 +7,8 @@ import net.sf.jsqlparser.statement.create.table.CreateTable
 import okio.Path
 
 internal class RoomEntitiesFileGenerator(
-    private val outputDir: Path, private val outputPackage: String
+    private val outputDir: Path,
+    private val outputPackage: String
 ) {
 
     fun generate(statements: List<Statement>): Result {
@@ -21,6 +22,7 @@ internal class RoomEntitiesFileGenerator(
             val entityResult =
                 RoomEntityGenerator.generateRoomEntity(outputPackage, statement, indicesAnnotations)
             fileBuilder.addType(entityResult.spec)
+            ignoredColumns.addAll(entityResult.ignoredColumns)
             entityResult.tableName
         }
 

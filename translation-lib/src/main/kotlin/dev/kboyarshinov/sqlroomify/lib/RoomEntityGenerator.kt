@@ -66,7 +66,7 @@ internal object RoomEntityGenerator {
                         .build()
                 )
             } catch (e: IllegalArgumentException) {
-                ignoredColumns.add(columnName)
+                ignoredColumns.add("$table.$columnName")
             }
         }
         entity.primaryConstructor(constructorBuilder.build())
