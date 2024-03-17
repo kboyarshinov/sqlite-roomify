@@ -16,7 +16,7 @@ class Run : CliktCommand() {
     val input: File by argument(help = "Input SQL Schema file").file(
         mustExist = true, mustBeReadable = true
     )
-    val output: Path by argument(help = "Output folder for generated files").path(
+    val output: Path by argument(help = "Output directory for generated files").path(
         mustExist = false,
         canBeFile = false,
     )

@@ -95,7 +95,7 @@ public data class User(
 ## Full list of options
 
 ```shell
-./sqlite-roomify.sh --help                                                                                                                                                                                                             [±main ●▴]
+./sqlite-roomify.sh --help
 Usage: run [<options>] <input> <output> <package-name> <database-name>
 
 Options:
@@ -104,7 +104,7 @@ Options:
 
 Arguments:
   <input>          Input SQL Schema file
-  <output>         Output folder for generated files
+  <output>         Output directory for generated files
   <package-name>   Package name to use for generated files
   <database-name>  Name of generated database class
 ```
