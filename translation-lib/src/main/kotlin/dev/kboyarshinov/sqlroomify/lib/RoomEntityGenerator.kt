@@ -45,10 +45,17 @@ internal object RoomEntityGenerator {
                 }
 
                 is SqliteToRoomColumnDataTypeConverter.UnsupportedType -> {
-                    ignoredColumns.add(result.columnName)
+                    if (!result.isNumericAffinity) {
+                        ignoredColumns.add(result.columnName)
+                    }
                 }
             }
         }
+//        if (ignoredColumns.isNotEmpty()) {
+//            entityAnnotation.addMember(
+//                arrayCodeBlockMember("ignoredColumns", ignoredColumns)
+//            )
+//        }
         entityBuilder.addAnnotation(entityAnnotation.build())
         entityBuilder.primaryConstructor(constructorBuilder.build())
 
@@ -71,7 +78,7 @@ internal object RoomEntityGenerator {
         parameterBuilder.addAnnotation(
             AnnotationSpec.builder(RoomClasses.columnInfoAnnotation)
                 .addMember("name = %S", result.columnName)
-//                .addMember("affinity = %T")
+                .addMember("typeAffinity = %T", result.typeAffinity.roomClassName())
                 .build()
         )
         constructorBuilder.addParameter(parameterBuilder.build())
@@ -91,3 +98,13 @@ internal object RoomEntityGenerator {
 
 private fun Table.generatedTableName(): String =
     name.lowercase().replaceFirstChar { it.uppercase() }
+
+private fun TypeAffinity.roomClassName(): ClassName = when (this) {
+    TypeAffinity.INTEGER -> RoomClasses.columnInfoTypeAffinityInteger
+    TypeAffinity.TEXT -> RoomClasses.columnInfoTypeAffinityText
+    TypeAffinity.BLOB -> RoomClasses.columnInfoTypeAffinityBlob
+    TypeAffinity.REAL -> RoomClasses.columnInfoTypeAffinityReal
+    // Room doesn't support NUMERIC affinity
+    TypeAffinity.NUMERIC,
+    TypeAffinity.UNKNOWN -> RoomClasses.columnInfoTypeAffinityUndefined
+}

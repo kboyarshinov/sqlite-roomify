@@ -12,11 +12,11 @@ internal object SqliteToRoomColumnDataTypeConverter {
         val columnType = column.colDataType.dataType.uppercase()
         val roomColumnType = column.roomType()
         val affinity = column.typeAffinity()
-        return if (roomColumnType == null || affinity == null) {
+        return if (roomColumnType == null || affinity == TypeAffinity.NUMERIC || affinity == null) {
             UnsupportedType(
                 columnName = columnName,
                 columnType = columnType,
-                typeAffinity = affinity ?: TypeAffinity.UNKNOWN
+                isNumericAffinity = affinity == TypeAffinity.NUMERIC
             )
         } else {
             SupportedType(
@@ -40,7 +40,7 @@ internal object SqliteToRoomColumnDataTypeConverter {
     data class UnsupportedType(
         val columnName: String,
         val columnType: String,
-        val typeAffinity: TypeAffinity,
+        val isNumericAffinity: Boolean
     ) : Result
 }
 

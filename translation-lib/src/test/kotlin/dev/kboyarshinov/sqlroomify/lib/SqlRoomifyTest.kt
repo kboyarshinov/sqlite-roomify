@@ -40,7 +40,6 @@ class SqlRoomifyTest {
             import androidx.room.Entity
             import androidx.room.Index
             import androidx.room.PrimaryKey
-            import kotlin.Boolean
             import kotlin.ByteArray
             import kotlin.Double
             import kotlin.Float
@@ -55,30 +54,56 @@ class SqlRoomifyTest {
             )
             public data class T1(
               @PrimaryKey
-              @ColumnInfo(name = "id")
+              @ColumnInfo(
+                name = "id",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val id: Int,
-              @ColumnInfo(name = "t")
+              @ColumnInfo(
+                name = "t",
+                typeAffinity = ColumnInfo.TEXT,
+              )
               public val t: String,
-              @ColumnInfo(name = "nu")
-              public val nu: Double?,
-              @ColumnInfo(name = "i")
+              @ColumnInfo(
+                name = "i",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val i: Int?,
-              @ColumnInfo(name = "i1")
+              @ColumnInfo(
+                name = "i1",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val i1: Int?,
-              @ColumnInfo(name = "ti")
+              @ColumnInfo(
+                name = "ti",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val ti: Int?,
-              @ColumnInfo(name = "bi")
+              @ColumnInfo(
+                name = "bi",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val bi: Int?,
-              @ColumnInfo(name = "r")
+              @ColumnInfo(
+                name = "r",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val r: Double?,
-              @ColumnInfo(name = "d")
+              @ColumnInfo(
+                name = "d",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val d: Double?,
-              @ColumnInfo(name = "f")
+              @ColumnInfo(
+                name = "f",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val f: Float?,
-              @ColumnInfo(name = "blob")
+              @ColumnInfo(
+                name = "blob",
+                typeAffinity = ColumnInfo.BLOB,
+              )
               public val blob: ByteArray?,
-              @ColumnInfo(name = "b")
-              public val b: Boolean?,
             )
             
             @Entity(
@@ -88,28 +113,51 @@ class SqlRoomifyTest {
               ],
             )
             public data class T2(
-              @ColumnInfo(name = "t")
+              @ColumnInfo(
+                name = "t",
+                typeAffinity = ColumnInfo.TEXT,
+              )
               public val t: String,
-              @ColumnInfo(name = "nu")
-              public val nu: Double?,
-              @ColumnInfo(name = "i")
+              @ColumnInfo(
+                name = "i",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val i: Int?,
-              @ColumnInfo(name = "i1")
+              @ColumnInfo(
+                name = "i1",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val i1: Int?,
-              @ColumnInfo(name = "ti")
+              @ColumnInfo(
+                name = "ti",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val ti: Int?,
-              @ColumnInfo(name = "bi")
+              @ColumnInfo(
+                name = "bi",
+                typeAffinity = ColumnInfo.INTEGER,
+              )
               public val bi: Int?,
-              @ColumnInfo(name = "r")
+              @ColumnInfo(
+                name = "r",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val r: Double?,
-              @ColumnInfo(name = "d")
+              @ColumnInfo(
+                name = "d",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val d: Double?,
-              @ColumnInfo(name = "f")
+              @ColumnInfo(
+                name = "f",
+                typeAffinity = ColumnInfo.REAL,
+              )
               public val f: Float?,
-              @ColumnInfo(name = "blob")
+              @ColumnInfo(
+                name = "blob",
+                typeAffinity = ColumnInfo.BLOB,
+              )
               public val blob: ByteArray?,
-              @ColumnInfo(name = "b")
-              public val b: Boolean?,
             )
             
         """.trimIndent(), generatedFile.read()
