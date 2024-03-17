@@ -26,24 +26,16 @@ internal object RoomEntityGenerator {
 
         if (indicesAnnotations.isNotEmpty()) {
             entityAnnotation.addMember(
-                "indices = %L", CodeBlock.builder()
-                    .apply {
-                        add("[\n")
-                        indicesAnnotations.forEachIndexed { index, spec ->
-                            if (index == indicesAnnotations.size - 1) {
-                                add("%L\n", spec)
-                            } else {
-                                add("%L,\n", spec)
-                            }
-                        }
-                        add("]")
-                    }
-                    .build()
+                arrayCodeBlockMember(
+                    "indices",
+                    indicesAnnotations,
+                    itemFormat = "%L",
+                    addLineBreaks = true
+                )
             )
         }
         val entity = TypeSpec.classBuilder(ClassName(outputPackage, table))
             .addModifiers(KModifier.DATA)
-            .addAnnotation(entityAnnotation.build())
 
         val constructorBuilder = FunSpec.constructorBuilder()
         statement.columnDefinitions.forEach {
@@ -66,7 +58,7 @@ internal object RoomEntityGenerator {
                         .build()
                 )
             } catch (e: IllegalArgumentException) {
-                ignoredColumns.add("$table.$columnName")
+                ignoredColumns.add(columnName)
             }
         }
         entity.primaryConstructor(constructorBuilder.build())
