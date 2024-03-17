@@ -30,7 +30,9 @@ CREATE TABLE t2(
     blob    BLOB,
     b       BOOLEAN,
     date    DATE,
-    dt      DATETIME
+    dt      DATETIME,
+    time    TIME,
+    ser     SERIAL
 );
 
 CREATE UNIQUE INDEX t2_t_index ON t2 (i1, date);

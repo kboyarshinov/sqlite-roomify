@@ -4,7 +4,13 @@ import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition
+import java.time.Instant
+import java.util.Date
 
+/**
+ * Converts SQLite data types to Room compatible types according to
+ * https://sqlite.org/datatype3.html
+ */
 internal object SqliteToRoomColumnDataTypeConverter {
 
     fun toRoomColumn(column: ColumnDefinition): Result {
@@ -12,19 +18,27 @@ internal object SqliteToRoomColumnDataTypeConverter {
         val columnType = column.colDataType.dataType.uppercase()
         val roomColumnType = column.roomType()
         val affinity = column.typeAffinity()
-        return if (roomColumnType == null || affinity == TypeAffinity.NUMERIC || affinity == null) {
-            UnsupportedType(
-                columnName = columnName,
-                columnType = columnType,
-                isNumericAffinity = affinity == TypeAffinity.NUMERIC
-            )
-        } else {
-            SupportedType(
-                columnName = columnName,
-                typeName = roomColumnType,
-                typeAffinity = affinity,
-                primaryKey = column.primaryKey()
-            )
+        return when {
+            roomColumnType != null && affinity == TypeAffinity.NUMERIC ->
+                IgnoredType(
+                    columnName = columnName,
+                    typeName = roomColumnType,
+                )
+
+            roomColumnType == null || affinity == null ->
+                UnsupportedType(
+                    columnName = columnName,
+                    columnType = columnType,
+                )
+
+            else ->
+                SupportedType(
+                    columnName = columnName,
+                    typeName = roomColumnType,
+                    typeAffinity = affinity,
+                    primaryKey = column.primaryKey()
+                )
+
         }
     }
 
@@ -37,10 +51,14 @@ internal object SqliteToRoomColumnDataTypeConverter {
         val primaryKey: Boolean,
     ) : Result
 
+    data class IgnoredType(
+        val columnName: String,
+        val typeName: TypeName,
+    ) : Result
+
     data class UnsupportedType(
         val columnName: String,
         val columnType: String,
-        val isNumericAffinity: Boolean
     ) : Result
 }
 
@@ -85,6 +103,8 @@ private fun ColumnDefinition.roomType(): TypeName? {
         "FLOAT" -> Float::class.asClassName()
         "BLOB" -> ByteArray::class.asClassName()
         "BOOLEAN" -> Boolean::class.asClassName()
+        "DATE" -> Date::class.asClassName()
+        "DATETIME" -> Instant::class.asClassName()
         "NUMERIC" -> Double::class.asClassName()
         else -> null
     }?.copy(nullable = !notNull())
@@ -118,8 +138,12 @@ private fun ColumnDefinition.typeAffinity(): TypeAffinity? {
         "FLOAT" -> TypeAffinity.REAL
 
         "BLOB" -> TypeAffinity.BLOB
-        "BOOLEAN" -> TypeAffinity.NUMERIC
+        "BOOLEAN",
+        "DECIMAL",
+        "DATE",
+        "DATETIME",
         "NUMERIC" -> TypeAffinity.NUMERIC
+
         else -> null
     }
 }

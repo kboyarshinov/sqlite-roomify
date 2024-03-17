@@ -38,24 +38,35 @@ internal object RoomEntityGenerator {
             .addModifiers(KModifier.DATA)
 
         val constructorBuilder = FunSpec.constructorBuilder()
-        statement.columnDefinitions.forEach { columnDef ->
-            when (val result = SqliteToRoomColumnDataTypeConverter.toRoomColumn(columnDef)) {
-                is SqliteToRoomColumnDataTypeConverter.SupportedType -> {
-                    buildSupportedColumnSpec(result, constructorBuilder, entityBuilder)
-                }
-
-                is SqliteToRoomColumnDataTypeConverter.UnsupportedType -> {
-                    if (!result.isNumericAffinity) {
-                        ignoredColumns.add(result.columnName)
-                    }
+        statement.columnDefinitions
+            .map(SqliteToRoomColumnDataTypeConverter::toRoomColumn)
+            // sort to put ignored types at the end
+            .sortedWith { t1, t2 ->
+                when {
+                    t1::class == t2::class -> 0
+                    t2::class.java == SqliteToRoomColumnDataTypeConverter.IgnoredType::class.java -> -1
+                    else -> 1
                 }
             }
+            .forEach { type ->
+                when (type) {
+                    is SqliteToRoomColumnDataTypeConverter.SupportedType -> {
+                        buildSupportedColumnSpec(type, constructorBuilder, entityBuilder)
+                    }
+
+                    is SqliteToRoomColumnDataTypeConverter.UnsupportedType -> {
+                        ignoredColumns.add(type.columnName)
+                    }
+
+                    is SqliteToRoomColumnDataTypeConverter.IgnoredType ->
+                        buildIgnoredColumnSpec(type, constructorBuilder, entityBuilder)
+                }
+            }
+        if (ignoredColumns.isNotEmpty()) {
+            entityAnnotation.addMember(
+                arrayCodeBlockMember("ignoredColumns", ignoredColumns)
+            )
         }
-//        if (ignoredColumns.isNotEmpty()) {
-//            entityAnnotation.addMember(
-//                arrayCodeBlockMember("ignoredColumns", ignoredColumns)
-//            )
-//        }
         entityBuilder.addAnnotation(entityAnnotation.build())
         entityBuilder.primaryConstructor(constructorBuilder.build())
 
@@ -66,25 +77,48 @@ internal object RoomEntityGenerator {
     }
 
     private fun buildSupportedColumnSpec(
-        result: SqliteToRoomColumnDataTypeConverter.SupportedType,
+        type: SqliteToRoomColumnDataTypeConverter.SupportedType,
         constructorBuilder: FunSpec.Builder,
         entity: TypeSpec.Builder
     ) {
-        val columnName = result.columnName.lowercase()
-        val parameterBuilder = ParameterSpec.builder(columnName, result.typeName)
-        if (result.primaryKey) {
+        val columnName = type.columnName.lowercase()
+        val parameterBuilder = ParameterSpec.builder(columnName, type.typeName)
+        if (type.primaryKey) {
             parameterBuilder.addAnnotation(RoomClasses.primaryKeyAnnotation)
         }
         parameterBuilder.addAnnotation(
             AnnotationSpec.builder(RoomClasses.columnInfoAnnotation)
-                .addMember("name = %S", result.columnName)
-                .addMember("typeAffinity = %T", result.typeAffinity.roomClassName())
+                .addMember("name = %S", type.columnName)
+                .addMember("typeAffinity = %T", type.typeAffinity.roomClassName())
                 .build()
         )
         constructorBuilder.addParameter(parameterBuilder.build())
         entity.addProperty(
             PropertySpec
-                .builder(columnName, result.typeName)
+                .builder(columnName, type.typeName)
+                .initializer(columnName)
+                .build()
+        )
+    }
+
+    private fun buildIgnoredColumnSpec(
+        type: SqliteToRoomColumnDataTypeConverter.IgnoredType,
+        constructorBuilder: FunSpec.Builder,
+        entity: TypeSpec.Builder
+    ) {
+        val columnName = type.columnName.lowercase()
+        // ignored types should always be nullable
+        val typeName = type.typeName.copy(nullable = true)
+        val parameterBuilder = ParameterSpec.builder(columnName, typeName)
+            .defaultValue("null")
+            .addAnnotation(
+                AnnotationSpec.builder(RoomClasses.ignoreAnnotation)
+                    .build()
+            )
+        constructorBuilder.addParameter(parameterBuilder.build())
+        entity.addProperty(
+            PropertySpec
+                .builder(columnName, typeName)
                 .initializer(columnName)
                 .build()
         )

@@ -38,8 +38,12 @@ class SqlRoomifyTest {
             
             import androidx.room.ColumnInfo
             import androidx.room.Entity
+            import androidx.room.Ignore
             import androidx.room.Index
             import androidx.room.PrimaryKey
+            import java.time.Instant
+            import java.util.Date
+            import kotlin.Boolean
             import kotlin.ByteArray
             import kotlin.Double
             import kotlin.Float
@@ -104,6 +108,14 @@ class SqlRoomifyTest {
                 typeAffinity = ColumnInfo.BLOB,
               )
               public val blob: ByteArray?,
+              @Ignore
+              public val nu: Double? = null,
+              @Ignore
+              public val b: Boolean? = null,
+              @Ignore
+              public val date: Date? = null,
+              @Ignore
+              public val dt: Instant? = null,
             )
             
             @Entity(
@@ -111,6 +123,7 @@ class SqlRoomifyTest {
               indices = [
               Index(name = "t2_t_index", value = ["i1","date"], unique = true)
               ],
+              ignoredColumns = ["time","ser"],
             )
             public data class T2(
               @ColumnInfo(
@@ -158,6 +171,14 @@ class SqlRoomifyTest {
                 typeAffinity = ColumnInfo.BLOB,
               )
               public val blob: ByteArray?,
+              @Ignore
+              public val nu: Double? = null,
+              @Ignore
+              public val b: Boolean? = null,
+              @Ignore
+              public val date: Date? = null,
+              @Ignore
+              public val dt: Instant? = null,
             )
             
         """.trimIndent(), generatedFile.read()
