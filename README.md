@@ -125,7 +125,7 @@ Arguments:
     See the License for the specific language governing permissions and
     limitations under the License.
 
-- [1]: https://developer.android.com/jetpack/androidx/releases/room
-- [2]: https://developer.android.com/reference/androidx/room/Entity
-- [3]: https://sqlite.org/lang_createtable.html
-- [4]: https://sqlite.org/syntax/column-constraint.html
+[1]: https://developer.android.com/jetpack/androidx/releases/room
+[2]: https://developer.android.com/reference/androidx/room/Entity
+[3]: https://sqlite.org/lang_createtable.html
+[4]: https://sqlite.org/syntax/column-constraint.html
