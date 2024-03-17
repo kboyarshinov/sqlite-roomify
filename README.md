@@ -1,4 +1,4 @@
-# sql-roomify
+# sqlite-roomify
 
 CLI tool to generate [Room][1] database [Entity][2] classes from SQLite schema to serve as a
 basis to write further migration.
@@ -29,7 +29,7 @@ data types.
 
 ## Usage
 
-Example SQL schema:
+Example SQLite schema:
 
 ```sql
 CREATE TABLE user(
@@ -42,10 +42,10 @@ CREATE TABLE user(
 CREATE UNIQUE INDEX user_on_age ON user (age);
 ```
 
-Run `sql-roomify` as:
+Run `sqlite-roomify` as:
 
 ```shell
-./sql-roomify.sh tables.sql ./generated dev.test TestDatabase
+./sqlite-roomify.sh tables.sql ./generated dev.test TestDatabase
 ```
 
 `generated` folder would contain classes:
@@ -95,7 +95,7 @@ public data class User(
 ## Full list of options
 
 ```shell
-./sql-roomify.sh --help                                                                                                                                                                                                             [±main ●▴]
+./sqlite-roomify.sh --help                                                                                                                                                                                                             [±main ●▴]
 Usage: run [<options>] <input> <output> <package-name> <database-name>
 
 Options:

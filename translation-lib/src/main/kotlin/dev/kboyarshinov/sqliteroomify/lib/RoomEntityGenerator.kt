@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.lib
+package dev.kboyarshinov.sqliteroomify.lib
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
@@ -16,7 +16,7 @@ internal object RoomEntityGenerator {
         outputPackage: String,
         statement: CreateTable,
         indicesAnnotations: List<AnnotationSpec>,
-        options: SqlRoomify.Options
+        options: SqliteRoomify.Options
     ): Result {
         val ignoredColumns = mutableListOf<String>()
 

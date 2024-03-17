@@ -4,7 +4,7 @@ plugins {
 }
 
 application {
-    mainClass = "dev.kboyarshinov.sqlroomify.cli.main.MainKt"
+    mainClass = "dev.kboyarshinov.sqliteroomify.cli.main.MainKt"
 }
 
 kotlin {

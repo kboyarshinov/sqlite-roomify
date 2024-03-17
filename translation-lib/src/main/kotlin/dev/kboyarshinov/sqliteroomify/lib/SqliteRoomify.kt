@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.lib
+package dev.kboyarshinov.sqliteroomify.lib
 
 import net.sf.jsqlparser.JSQLParserException
 import net.sf.jsqlparser.parser.CCJSqlParserUtil
@@ -9,9 +9,9 @@ import okio.buffer
 import okio.use
 import java.util.concurrent.Executors
 
-public object SqlRoomify {
+public object SqliteRoomify {
 
-    public fun sqlToRoom(
+    public fun sqliteToRoom(
         input: Path,
         outputDir: Path,
         outputPackage: String,

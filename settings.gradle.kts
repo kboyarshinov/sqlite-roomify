@@ -11,7 +11,7 @@ apply(file("gradle/plugin-repositories.gradle.kts"))
 // apply common repository configuration
 apply(file("gradle/repositories.gradle.kts"))
 
-rootProject.name = "sql-roomify"
+rootProject.name = "sqlite-roomify"
 
 // modules to include
 include(

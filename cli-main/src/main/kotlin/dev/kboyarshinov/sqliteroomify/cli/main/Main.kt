@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.cli.main
+package dev.kboyarshinov.sqliteroomify.cli.main
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
@@ -7,7 +7,7 @@ import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.boolean
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.path
-import dev.kboyarshinov.sqlroomify.lib.SqlRoomify
+import dev.kboyarshinov.sqliteroomify.lib.SqliteRoomify
 import okio.Path.Companion.toOkioPath
 import java.io.File
 import java.nio.file.Path
@@ -36,21 +36,21 @@ class Run : CliktCommand() {
     override fun run() {
         echo("Processing input: ${input.path}...")
 
-        val result = SqlRoomify.sqlToRoom(
+        val result = SqliteRoomify.sqliteToRoom(
             input = input.toOkioPath(),
             outputDir = output.toOkioPath(),
             outputPackage = packageName,
             databaseName = databaseName,
-            options = SqlRoomify.Options(
+            options = SqliteRoomify.Options(
                 listAllIgnoredColumns = listAllIgnoredColumns ?: true
             )
         )
         when (result) {
-            is SqlRoomify.Success -> {
+            is SqliteRoomify.Success -> {
                 echo("Success! Generated files to ${output.toFile().path}")
             }
 
-            is SqlRoomify.Error -> {
+            is SqliteRoomify.Error -> {
                 echo(result.message, err = true)
             }
         }

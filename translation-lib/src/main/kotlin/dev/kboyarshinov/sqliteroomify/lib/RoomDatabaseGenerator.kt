@@ -1,4 +1,4 @@
-package dev.kboyarshinov.sqlroomify.lib
+package dev.kboyarshinov.sqliteroomify.lib
 
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName

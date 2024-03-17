@@ -8,4 +8,4 @@ dependencyResolutionManagement {
 
 apply(file("../gradle/repositories.gradle.kts"))
 
-rootProject.name = "sql-roomify"
+rootProject.name = "sqlite-roomify"
