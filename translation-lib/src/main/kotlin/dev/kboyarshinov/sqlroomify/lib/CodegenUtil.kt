@@ -11,7 +11,7 @@ internal fun arrayCodeBlockMember(
     CodeBlock.of(
         "$name = %L",
         CodeBlock.builder().apply {
-            add("[")
+            add("[⇥")
             if (addLineBreaks) add("\n")
             data.forEachIndexed { index, item ->
                 if (index == data.size - 1) {
@@ -21,6 +21,6 @@ internal fun arrayCodeBlockMember(
                 }
                 if (addLineBreaks) add("\n")
             }
-            add("]")
+            add("⇤]")
         }.build()
     )

@@ -22,19 +22,46 @@ class SqlRoomifyTest {
         val result = SqlRoomify.sqlToRoom(
             input = TestUtil.testResourcePath("sql/create-2-tables.sql"),
             outputDir = tempDirectory.toOkioPath(),
-            outputPackage = "dev.test"
+            outputPackage = "dev.test",
+            databaseName = "TestDatabase"
         )
 
         assertSuccess(result) {
             assertEquals(2, it.tablesCount)
         }
 
-        val generatedFile = tempDirectory.resolve("dev/test/Tables.kt")
-        assertTrue(generatedFile.exists())
+        val generatedT1 = tempDirectory.resolve("dev/test/tables/T1.kt")
+        assertTrue(generatedT1.exists())
+        val generatedT2 = tempDirectory.resolve("dev/test/tables/T2.kt")
+        assertTrue(generatedT2.exists())
+        val generatedDatabase = tempDirectory.resolve("dev/test/TestDatabase.kt")
+        assertTrue(generatedDatabase.exists())
 
         assertEquals(
             """
             package dev.test
+            
+            import androidx.room.Database
+            import androidx.room.RoomDatabase
+            import dev.test.tables.T1
+            import dev.test.tables.T2
+            
+            @Database(
+              entities = [
+                T1::class,
+                T2::class
+              ],
+              version = 1,
+            )
+            public abstract class TestDatabase : RoomDatabase()
+
+            """.trimIndent(),
+            generatedDatabase.read()
+        )
+
+        assertEquals(
+            """
+            package dev.test.tables
             
             import androidx.room.ColumnInfo
             import androidx.room.Entity
@@ -53,7 +80,7 @@ class SqlRoomifyTest {
             @Entity(
               tableName = "t1",
               indices = [
-              Index(name = "t1_t_index", value = ["t"], unique = false)
+                Index(name = "t1_t_index", value = ["t"], unique = false)
               ],
               ignoredColumns = ["nu","b","date","dt"],
             )
@@ -119,10 +146,30 @@ class SqlRoomifyTest {
               public val dt: Instant? = null,
             )
             
+            """.trimIndent(), generatedT1.read()
+        )
+
+        assertEquals(
+            """
+            package dev.test.tables
+            
+            import androidx.room.ColumnInfo
+            import androidx.room.Entity
+            import androidx.room.Ignore
+            import androidx.room.Index
+            import java.time.Instant
+            import java.util.Date
+            import kotlin.Boolean
+            import kotlin.ByteArray
+            import kotlin.Double
+            import kotlin.Float
+            import kotlin.Int
+            import kotlin.String
+            
             @Entity(
               tableName = "t2",
               indices = [
-              Index(name = "t2_t_index", value = ["i1","date"], unique = true)
+                Index(name = "t2_t_index", value = ["i1","date"], unique = true)
               ],
               ignoredColumns = ["time","ser","nu","b","date","dt"],
             )
@@ -182,7 +229,7 @@ class SqlRoomifyTest {
               public val dt: Instant? = null,
             )
             
-        """.trimIndent(), generatedFile.read()
+        """.trimIndent(), generatedT2.read()
         )
     }
 }

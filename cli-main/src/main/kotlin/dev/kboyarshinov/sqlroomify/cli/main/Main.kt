@@ -24,6 +24,10 @@ class Run : CliktCommand() {
         name = "package-name",
         help = "Package name to use for generated files"
     )
+    val databaseName: String by argument(
+        name = "database-name",
+        help = "Name of generated database class"
+    )
 
     val listAllIgnoredColumns: Boolean by option(
         help = "List all ignored columns in Entity's ignoredColumns parameter. 'true' by default."
@@ -36,6 +40,7 @@ class Run : CliktCommand() {
             input = input.toOkioPath(),
             outputDir = output.toOkioPath(),
             outputPackage = packageName,
+            databaseName = databaseName,
             options = SqlRoomify.Options(
                 listAllIgnoredColumns = listAllIgnoredColumns ?: true
             )

@@ -35,7 +35,8 @@ internal object RoomEntityGenerator {
                 )
             )
         }
-        val entityBuilder = TypeSpec.classBuilder(ClassName(outputPackage, table))
+        val className = ClassName(outputPackage, table)
+        val entityBuilder = TypeSpec.classBuilder(className)
             .addModifiers(KModifier.DATA)
 
         val constructorBuilder = FunSpec.constructorBuilder()
@@ -77,7 +78,8 @@ internal object RoomEntityGenerator {
 
         return Result(
             tableName = table,
-            spec = entityBuilder.build(),
+            typeSpec = entityBuilder.build(),
+            className = className,
         )
     }
 
@@ -131,7 +133,8 @@ internal object RoomEntityGenerator {
 
     data class Result(
         val tableName: String,
-        val spec: TypeSpec,
+        val typeSpec: TypeSpec,
+        val className: ClassName
     )
 }
 

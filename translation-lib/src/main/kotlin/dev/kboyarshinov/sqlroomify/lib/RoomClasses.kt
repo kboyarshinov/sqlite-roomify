@@ -13,4 +13,6 @@ internal object RoomClasses {
     val columnInfoTypeAffinityReal = ClassName("androidx.room", "ColumnInfo", "REAL")
     val columnInfoTypeAffinityBlob = ClassName("androidx.room", "ColumnInfo", "BLOB")
     val indexAnnotation = ClassName("androidx.room", "Index")
+    val databaseAnnotation = ClassName("androidx.room", "Database")
+    val roomDatabase = ClassName("androidx.room", "RoomDatabase")
 }

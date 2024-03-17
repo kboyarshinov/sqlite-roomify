@@ -15,6 +15,7 @@ public object SqlRoomify {
         input: Path,
         outputDir: Path,
         outputPackage: String,
+        databaseName: String,
         options: Options = Options()
     ): Result {
         return try {
@@ -29,9 +30,9 @@ public object SqlRoomify {
                     )
                     singleThreadExecutor.shutdownNow()
 
-                    val generator = RoomEntitiesFileGenerator(outputDir, outputPackage)
+                    val generator = RoomDatabaseAndEntitiesFileGenerator(outputDir, outputPackage)
 
-                    val result = generator.generate(statements, options)
+                    val result = generator.generate(databaseName, statements, options)
                     Success(
                         tablesCount = result.tableNames.count()
                     )
