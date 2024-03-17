@@ -15,3 +15,5 @@ internal object RoomIndexGenerator {
             .addMember("unique = %L", createIndex.isUnique())
             .build()
 }
+
+private fun CreateIndex.isUnique(): Boolean = index.type == "UNIQUE"

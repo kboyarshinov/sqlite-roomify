@@ -13,7 +13,6 @@ internal class RoomEntitiesFileGenerator(
 
     fun generate(statements: List<Statement>): Result {
         val fileBuilder = FileSpec.builder(outputPackage, "Tables")
-        val ignoredColumns = mutableListOf<String>()
         val indices = statements.filterIsInstance<CreateIndex>()
         val tables = statements.filterIsInstance<CreateTable>().map { statement ->
             val tableIndices: List<CreateIndex> =
@@ -22,7 +21,6 @@ internal class RoomEntitiesFileGenerator(
             val entityResult =
                 RoomEntityGenerator.generateRoomEntity(outputPackage, statement, indicesAnnotations)
             fileBuilder.addType(entityResult.spec)
-            ignoredColumns.addAll(entityResult.ignoredColumns)
             entityResult.tableName
         }
 
@@ -30,11 +28,11 @@ internal class RoomEntitiesFileGenerator(
         file.writeTo(outputDir.toNioPath()).toFile()
 
         return Result(
-            tableNames = tables, ignoredColumns = ignoredColumns
+            tableNames = tables
         )
     }
 
     internal data class Result(
-        val tableNames: List<String>, val ignoredColumns: List<String>
+        val tableNames: List<String>
     )
 }

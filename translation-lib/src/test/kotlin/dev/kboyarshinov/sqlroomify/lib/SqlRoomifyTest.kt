@@ -41,6 +41,7 @@ class SqlRoomifyTest {
             import androidx.room.Index
             import androidx.room.PrimaryKey
             import kotlin.Boolean
+            import kotlin.ByteArray
             import kotlin.Double
             import kotlin.Float
             import kotlin.Int
@@ -58,16 +59,24 @@ class SqlRoomifyTest {
               public val id: Int,
               @ColumnInfo(name = "t")
               public val t: String,
+              @ColumnInfo(name = "nu")
+              public val nu: Double?,
               @ColumnInfo(name = "i")
               public val i: Int?,
               @ColumnInfo(name = "i1")
               public val i1: Int?,
+              @ColumnInfo(name = "ti")
+              public val ti: Int?,
+              @ColumnInfo(name = "bi")
+              public val bi: Int?,
               @ColumnInfo(name = "r")
               public val r: Double?,
               @ColumnInfo(name = "d")
               public val d: Double?,
               @ColumnInfo(name = "f")
               public val f: Float?,
+              @ColumnInfo(name = "blob")
+              public val blob: ByteArray?,
               @ColumnInfo(name = "b")
               public val b: Boolean?,
             )
@@ -81,16 +90,24 @@ class SqlRoomifyTest {
             public data class T2(
               @ColumnInfo(name = "t")
               public val t: String,
+              @ColumnInfo(name = "nu")
+              public val nu: Double?,
               @ColumnInfo(name = "i")
               public val i: Int?,
               @ColumnInfo(name = "i1")
               public val i1: Int?,
+              @ColumnInfo(name = "ti")
+              public val ti: Int?,
+              @ColumnInfo(name = "bi")
+              public val bi: Int?,
               @ColumnInfo(name = "r")
               public val r: Double?,
               @ColumnInfo(name = "d")
               public val d: Double?,
               @ColumnInfo(name = "f")
               public val f: Float?,
+              @ColumnInfo(name = "blob")
+              public val blob: ByteArray?,
               @ColumnInfo(name = "b")
               public val b: Boolean?,
             )
