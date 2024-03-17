@@ -16,6 +16,7 @@ internal object RoomEntityGenerator {
         outputPackage: String,
         statement: CreateTable,
         indicesAnnotations: List<AnnotationSpec>,
+        options: SqlRoomify.Options
     ): Result {
         val ignoredColumns = mutableListOf<String>()
 
@@ -58,8 +59,12 @@ internal object RoomEntityGenerator {
                         ignoredColumns.add(type.columnName)
                     }
 
-                    is SqliteToRoomColumnDataTypeConverter.IgnoredType ->
+                    is SqliteToRoomColumnDataTypeConverter.IgnoredType -> {
                         buildIgnoredColumnSpec(type, constructorBuilder, entityBuilder)
+                        if (options.listAllIgnoredColumns) {
+                            ignoredColumns.add(type.columnName)
+                        }
+                    }
                 }
             }
         if (ignoredColumns.isNotEmpty()) {

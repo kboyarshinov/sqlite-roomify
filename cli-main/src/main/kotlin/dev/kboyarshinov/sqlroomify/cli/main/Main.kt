@@ -2,6 +2,9 @@ package dev.kboyarshinov.sqlroomify.cli.main
 
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.arguments.argument
+import com.github.ajalt.clikt.parameters.options.default
+import com.github.ajalt.clikt.parameters.options.option
+import com.github.ajalt.clikt.parameters.types.boolean
 import com.github.ajalt.clikt.parameters.types.file
 import com.github.ajalt.clikt.parameters.types.path
 import dev.kboyarshinov.sqlroomify.lib.SqlRoomify
@@ -17,7 +20,14 @@ class Run : CliktCommand() {
         mustExist = false,
         canBeFile = false,
     )
-    val packageName: String by argument(name = "package-name", help = "Package name to use for generated files")
+    val packageName: String by argument(
+        name = "package-name",
+        help = "Package name to use for generated files"
+    )
+
+    val listAllIgnoredColumns: Boolean by option(
+        help = "List all ignored columns in Entity's ignoredColumns parameter. 'true' by default."
+    ).boolean().default(true)
 
     override fun run() {
         echo("Processing input: ${input.path}...")
@@ -25,7 +35,10 @@ class Run : CliktCommand() {
         val result = SqlRoomify.sqlToRoom(
             input = input.toOkioPath(),
             outputDir = output.toOkioPath(),
-            outputPackage = packageName
+            outputPackage = packageName,
+            options = SqlRoomify.Options(
+                listAllIgnoredColumns = listAllIgnoredColumns ?: true
+            )
         )
         when (result) {
             is SqlRoomify.Success -> {

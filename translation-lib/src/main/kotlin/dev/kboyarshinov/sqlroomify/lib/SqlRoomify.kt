@@ -11,7 +11,12 @@ import java.util.concurrent.Executors
 
 public object SqlRoomify {
 
-    public fun sqlToRoom(input: Path, outputDir: Path, outputPackage: String): Result {
+    public fun sqlToRoom(
+        input: Path,
+        outputDir: Path,
+        outputPackage: String,
+        options: Options = Options()
+    ): Result {
         return try {
             FileSystem.SYSTEM.source(input).use { source ->
                 source.buffer().use { bufferedSource ->
@@ -26,7 +31,7 @@ public object SqlRoomify {
 
                     val generator = RoomEntitiesFileGenerator(outputDir, outputPackage)
 
-                    val result = generator.generate(statements)
+                    val result = generator.generate(statements, options)
                     Success(
                         tablesCount = result.tableNames.count()
                     )
@@ -46,4 +51,8 @@ public object SqlRoomify {
     ) : Result
 
     public class Error(public val message: String) : Result
+
+    public data class Options(
+        val listAllIgnoredColumns: Boolean = true
+    )
 }

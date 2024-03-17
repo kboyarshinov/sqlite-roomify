@@ -11,7 +11,7 @@ internal class RoomEntitiesFileGenerator(
     private val outputPackage: String
 ) {
 
-    fun generate(statements: List<Statement>): Result {
+    fun generate(statements: List<Statement>, options: SqlRoomify.Options): Result {
         val fileBuilder = FileSpec.builder(outputPackage, "Tables")
         val indices = statements.filterIsInstance<CreateIndex>()
         val tables = statements.filterIsInstance<CreateTable>().map { statement ->
@@ -19,7 +19,12 @@ internal class RoomEntitiesFileGenerator(
                 indices.filter { it.table.name == statement.table.name }
             val indicesAnnotations = tableIndices.map(RoomIndexGenerator::toAnnotationSpec)
             val entityResult =
-                RoomEntityGenerator.generateRoomEntity(outputPackage, statement, indicesAnnotations)
+                RoomEntityGenerator.generateRoomEntity(
+                    outputPackage,
+                    statement,
+                    indicesAnnotations,
+                    options
+                )
             fileBuilder.addType(entityResult.spec)
             entityResult.tableName
         }

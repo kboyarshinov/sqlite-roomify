@@ -55,6 +55,7 @@ class SqlRoomifyTest {
               indices = [
               Index(name = "t1_t_index", value = ["t"], unique = false)
               ],
+              ignoredColumns = ["nu","b","date","dt"],
             )
             public data class T1(
               @PrimaryKey
@@ -123,7 +124,7 @@ class SqlRoomifyTest {
               indices = [
               Index(name = "t2_t_index", value = ["i1","date"], unique = true)
               ],
-              ignoredColumns = ["time","ser"],
+              ignoredColumns = ["time","ser","nu","b","date","dt"],
             )
             public data class T2(
               @ColumnInfo(
