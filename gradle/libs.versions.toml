@@ -1,6 +1,6 @@
 [versions]
 # tools & plugins
-kotlin = "1.9.24"
+kotlin = "2.0.0"
 
 # libraries
 kotlinpoet = "1.17.0"
