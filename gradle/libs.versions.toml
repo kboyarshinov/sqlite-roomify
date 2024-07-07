@@ -3,7 +3,7 @@
 kotlin = "2.0.0"
 
 # libraries
-kotlinpoet = "1.17.0"
+kotlinpoet = "1.18.0"
 jsqlparser = "4.9"
 clikt = "4.4.0"
 okio = "3.9.0"
