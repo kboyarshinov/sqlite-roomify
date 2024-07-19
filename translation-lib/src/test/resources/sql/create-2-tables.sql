@@ -18,7 +18,7 @@ CREATE TABLE t1(
 CREATE INDEX t1_t_index ON t1 (t);
 
 CREATE TABLE t2(
-    t       VARCHAR(255) NOT NULL,
+    t       VARCHAR NOT NULL,
     nu      NUMERIC,
     i       INTEGER,
     i1      INT,
