@@ -5,7 +5,7 @@ kotlin = "2.0.20"
 # libraries
 kotlinpoet = "1.18.1"
 jsqlparser = "5.0"
-clikt = "4.4.0"
+clikt = "5.0.0"
 okio = "3.9.1"
 junit = "5.11.0"
 
