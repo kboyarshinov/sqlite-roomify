@@ -7,7 +7,7 @@ kotlinpoet = "1.18.1"
 jsqlparser = "5.0"
 clikt = "4.4.0"
 okio = "3.9.1"
-junit = "5.11.0"
+junit = "5.11.1"
 
 [libraries]
 
